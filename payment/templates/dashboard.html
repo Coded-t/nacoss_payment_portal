@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NACOS Payment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #007bff;
+        }
+        .user-info p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #495057;
+        }
+        .user-info strong {
+            color: #333;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            .user-info {
+                padding: 15px;
+            }
+            .user-info p {
+                font-size: 1em;
+            }
+        }
+        button {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+        }
+        .logout {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+        }
+        .logout:hover {
+            background: linear-gradient(45deg, #c82333, #a02622);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to NACOS Payment System</h2>
+        <div class="user-info">
+            <p><strong>Matric Number:</strong> {{ user.matric_number }}</p>
+            <p><strong>Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+        <div class="actions">
+            <a href="{% url 'dues' %}"><button>View Dues</button></a>
+            <a href="{% url 'logout' %}"><button class="logout">Logout</button></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transfer - NACOS Payment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .fee-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #007bff;
+        }
+        .fee-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .fee-amount {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .payment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 768px) {
+            .payment-details {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .detail {
+                padding: 12px;
+            }
+            .label {
+                font-size: 0.9em;
+            }
+            .value {
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+            }
+            .modal-content {
+                padding: 20px;
+                max-width: 90%;
+            }
+            .countdown {
+                font-size: 1.5em;
+            }
+        }
+        .detail {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+        .label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .value {
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #495057;
+            word-break: break-all;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .instructions h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .instructions p {
+            color: #856404;
+            margin-bottom: 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        button {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+        .back {
+            background: linear-gradient(45deg, #6c757d, #495057);
+        }
+        .back:hover {
+            background: linear-gradient(45deg, #5a6268, #343a40);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: slideIn 0.3s ease;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .cancel-btn {
+            background: linear-gradient(45deg, #6c757d, #495057);
+        }
+        .cancel-btn:hover {
+            background: linear-gradient(45deg, #5a6268, #343a40);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .countdown {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .verify-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            margin-bottom: 10px;
+        }
+        .verify-btn:hover {
+            background: linear-gradient(45deg, #218838, #17a2b8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bank Transfer Details</h2>
+        <div class="fee-info">
+            <div class="fee-name">{{ fee_name }}</div>
+            <div class="fee-amount">₦{{ payment.amount }}</div>
+        </div>
+        <div class="payment-details">
+            <div class="detail">
+                <span class="label">Reference Number:</span>
+                <span class="value">{{ payment.reference_number }}</span>
+            </div>
+            <div class="detail">
+                <span class="label">Bank Name:</span>
+                <span class="value">NACOS Bank</span>
+            </div>
+            <div class="detail">
+                <span class="label">Account Number:</span>
+                <span class="value">1234567890</span>
+            </div>
+            <div class="detail">
+                <span class="label">Account Name:</span>
+                <span class="value">NACOS Payment System</span>
+            </div>
+        </div>
+        <div class="instructions">
+            <h3>Payment Instructions</h3>
+            <p>Please transfer the exact amount to the account details above. Use the reference number as the transaction description for easy identification of your payment.</p>
+        </div>
+        <div class="buttons">
+            <button onclick="showPaymentVerification()" class="verify-btn">I Have Made Payment</button>
+            <a href="{% url 'dashboard' %}"><button class="back">Back to Dashboard</button></a>
+        </div>
+        <div id="verification-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Payment Verification</h3>
+                <p>Verifying your payment...</p>
+                <div class="countdown">10:00</div>
+                <p>Please wait while we confirm your transaction.</p>
+                <div class="modal-buttons">
+                    <button onclick="cancelVerification()" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let timer;
+
+        function showPaymentVerification() {
+            const modal = document.getElementById('verification-modal');
+            modal.style.display = 'flex';
+            let timeLeft = 600; // 10 minutes in seconds
+            const countdownElement = document.querySelector('.countdown');
+
+            timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = 'Verification Complete!';
+                    setTimeout(() => {
+                        window.location.href = "{% url 'dashboard' %}";
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function cancelVerification() {
+            clearInterval(timer);
+            const modal = document.getElementById('verification-modal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
